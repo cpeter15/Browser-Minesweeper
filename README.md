@@ -31,7 +31,7 @@ while (game != finished){
     }
 }
 
-# Delicerables
+# Deliverables
 
 MVP Criteria
 
