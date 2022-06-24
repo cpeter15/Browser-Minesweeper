@@ -6,30 +6,30 @@ I was planning to make a in-browser version of Minesweeper. Minesweeper is a sin
 
 # Game Logic
 
-On page load: ask the player what difficulty they want to play.
-create board based on user response
-add bombs to board
-append board to the DOM
-while (game != finished){
-    wait for the player to click on a space
-    if (left click){
-        reveal space
-        if (space has a bomb){
-            player loses game
-        }
-        else if (space doesn't have a bomb){
-            add a number to the space to tell the player how many bombs are in the adjacent spaces
-            game continues
-        }
-    }
-    else if (right click){
-        flag space
-        decrement bomb counter
-    }
-    if (bomb counter === 0 && all empty spaces are revealed){
-        player wins game
-    }
-}
+On page load: ask the player what difficulty they want to play.  
+create board based on user response  
+add bombs to board  
+append board to the DOM  
+while (game != finished){  
+    wait for the player to click on a space  
+    if (left click){  
+        reveal space  
+        if (space has a bomb){  
+            player loses game  
+        }  
+        else if (space doesn't have a bomb){  
+            add a number to the space to tell the player how many bombs are in the adjacent spaces  
+            game continues  
+        }  
+    }  
+    else if (right click){  
+        flag space  
+        decrement bomb counter  
+    }  
+    if (bomb counter === 0 && all empty spaces are revealed){  
+        player wins game  
+    }  
+}  
 
 # Deliverables
 
