@@ -1,16 +1,18 @@
 // Beginner: 8x8, 10 Mines
 // Intermediate: 16x16 40 Mines
-// Expert: 16x30 99 Mines 
+// Expert: 30x16 99 Mines 
 
 
 const makeBoard = (x, y, numMines) => {
+    // tests if there are too many mines to fit into the board
     if (numMines > (x * y)) {
         console.log("too many mines")
         return null;
     }
-    const board = [];
+    let board = [];
     const boardSection = document.createElement("section");
     boardSection.setAttribute("id", "board");
+    boardSection.style.width = (x * 50) + 'px';
     document.body.append(boardSection)
 
     for (let i = 0; i < y; i++) {
@@ -23,9 +25,10 @@ const makeBoard = (x, y, numMines) => {
         board.push(arr);
     }
 
-    armBoard(board, numMines)
+    armBoard(board, numMines);
 
     const clearBoard = () => {
+        console.log("clearing board");
         board = null;
         boardSection.remove();
     }
@@ -84,14 +87,15 @@ const crateSpace = (x, y, board) => {
     }
 
     const revealSpace = () => {
-        space.style.backgroundImage = "none";
+        if (isFlaged) {
+            space.style.backgroundImage = "none";
+        }
         isFlaged = false;
         if (isBomb) {
             space.textContent = "bomb";
             console.log("Game Over");
         } else if (!isRevealed) {
             let count = 0;
-            console.log("test")
             if (board[y - 1] && board[y - 1][x - 1] && board[y - 1][x - 1].getBomb()) {
                 count++;
             }
@@ -169,7 +173,14 @@ const crateSpace = (x, y, board) => {
         e.preventDefault();
     })
     space.addEventListener("click", revealSpace);
-    space.addEventListener("auxclick", flagSpace);
+    space.addEventListener("auxclick", (e) => {
+        if (e.button == 2) {
+            flagSpace();
+        }
+        else if (e.button == 1) {
+            console.log("middle click");
+        }
+    });
 
     const makeBomb = () => {
         isBomb = true;
@@ -210,4 +221,11 @@ const armBoard = (board, mines) => {
         arr.splice(random, 1);
         console.log(`made bomb ${i}`);
     }
+
 }
+
+
+
+let gameBoard = makeBoard(30, 16, 99);
+
+
