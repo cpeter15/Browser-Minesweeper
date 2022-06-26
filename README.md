@@ -10,6 +10,7 @@ On page load: ask the player what difficulty they want to play.
 create board based on user response
 add bombs to board
 append board to the DOM
+```
 while (game != finished){
     wait for the player to click on a space
     if (left click){
@@ -30,6 +31,7 @@ while (game != finished){
         player wins game
     }
 }
+```
 
 # Deliverables
 
