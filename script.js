@@ -2,6 +2,7 @@
 // Intermediate: 16x16 40 Mines
 // Expert: 30x16 99 Mines 
 
+let gameBoard
 
 const makeBoard = (x, y, numMines) => {
     // tests if there are too many mines to fit into the board
@@ -225,7 +226,75 @@ const armBoard = (board, mines) => {
 }
 
 
+const difficultyMenu = () => {
+    let menu = document.createElement("div");
+    menu.setAttribute("class", "menu");
+    let form = document.createElement("form");
+    form.setAttribute("id", "difficulty-options");
 
-let gameBoard = makeBoard(30, 16, 99);
+    let beginner = document.createElement("input");
+    beginner.setAttribute("type", "radio");
+    beginner.setAttribute("name", "difficulty");
+    beginner.setAttribute("id", "beginner");
+    beginner.setAttribute("value", "beginner");
+    beginner.setAttribute("checked", "");
+    let label = document.createElement("label");
+    label.setAttribute("for", "beginner");
+    label.textContent = "Beginner";
+    let inputDiv = document.createElement("div");
+    inputDiv.appendChild(beginner);
+    inputDiv.appendChild(label);
+    form.appendChild(inputDiv);
+
+    let intermediate = document.createElement("input");
+    intermediate.setAttribute("type", "radio");
+    intermediate.setAttribute("name", "difficulty");
+    intermediate.setAttribute("id", "intermediate");
+    intermediate.setAttribute("value", "intermediate");
+    label = document.createElement("label");
+    label.setAttribute("for", "intermediate");
+    label.textContent = "Intermediate";
+    inputDiv = document.createElement("div");
+    inputDiv.appendChild(intermediate);
+    inputDiv.appendChild(label);
+    form.appendChild(inputDiv);
+
+    let expert = document.createElement("input");
+    expert.setAttribute("type", "radio");
+    expert.setAttribute("name", "difficulty");
+    expert.setAttribute("id", "expert");
+    expert.setAttribute("value", "expert");
+    label = document.createElement("label");
+    label.setAttribute("for", "expert");
+    label.textContent = "Expert";
+    inputDiv = document.createElement("div");
+    inputDiv.appendChild(expert);
+    inputDiv.appendChild(label);
+    form.appendChild(inputDiv);
+
+    menu.append(form);
+    document.body.appendChild(menu);
+
+    let submit = document.createElement("button");
+    submit.textContent = "Start Game";
+
+    submit.addEventListener("click", () => {
+        let inputDifficulty = form.elements["difficulty"];
+        menu.remove()
+        if (inputDifficulty.value === "beginner") {
+            gameBoard = makeBoard(8, 8, 10);
+        } else if (inputDifficulty.value === "intermediate") {
+            gameBoard = makeBoard(16, 16, 40);
+        } else if (inputDifficulty.value === "expert") {
+            gameBoard = makeBoard(30, 16, 99);
+        }
+    })
+
+    form.appendChild(submit);
+
+
+}
+
+difficultyMenu();
 
 
