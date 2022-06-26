@@ -6,7 +6,6 @@
 
 #board {
     display: flex;
-    width: 800px;
     margin: 100px auto;
     flex-wrap: wrap;
 }

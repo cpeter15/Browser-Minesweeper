@@ -11,6 +11,8 @@ const makeBoard = (x, y, numMines) => {
         return null;
     }
     let board = [];
+    let numFlagged = 0;
+    let numRevealed = 0;
     const boardSection = document.createElement("section");
     boardSection.setAttribute("id", "board");
     boardSection.style.width = (x * 50) + 'px';
@@ -34,9 +36,19 @@ const makeBoard = (x, y, numMines) => {
         boardSection.remove();
     }
 
+    const checkWinCondition = () => {
+        console.log(`flagged: ${gameBoard.flagged} revealed: ${gameBoard.revealed}`);
+        if ((gameBoard.flagged === numMines) && (gameBoard.flagged + gameBoard.revealed === (x * y))) {
+            setTimeout(() => alert("You Won"), 10);
+        }
+    }
+
     return {
         board: board,
-        clear: clearBoard
+        revealed: numRevealed,
+        flagged: numFlagged,
+        clear: clearBoard,
+        check: checkWinCondition
     }
 }
 
@@ -90,11 +102,12 @@ const crateSpace = (x, y, board) => {
     const revealSpace = () => {
         if (isFlaged) {
             space.style.backgroundImage = "none";
+            gameBoard.flagged--;
+            isFlaged = false;
         }
-        isFlaged = false;
         if (isBomb) {
             space.textContent = "bomb";
-            console.log("Game Over");
+            setTimeout(() => alert("Game Over"), 10);
         } else if (!isRevealed) {
             let count = 0;
             if (board[y - 1] && board[y - 1][x - 1] && board[y - 1][x - 1].getBomb()) {
@@ -122,6 +135,8 @@ const crateSpace = (x, y, board) => {
                 count++;
             }
             isRevealed = true;
+            gameBoard.revealed += 1;
+            console.log("revealed " + gameBoard.revealed)
             if (count !== 0) {
                 space.textContent = count;
             } else {
@@ -155,6 +170,7 @@ const crateSpace = (x, y, board) => {
                     board[y + 1][x + 1].revealSpace();
                 }
             }
+            gameBoard.check();
         }
 
 
@@ -164,10 +180,13 @@ const crateSpace = (x, y, board) => {
             space.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/76px-Minesweeper_flag.svg.png')";
             console.log("flagged");
             isFlaged = true;
+            gameBoard.flagged++;
         } else {
             space.style.backgroundImage = "none";
             isFlaged = false;
+            gameBoard.flagged--;
         }
+        gameBoard.check();
     }
 
     space.addEventListener("contextmenu", e => {
