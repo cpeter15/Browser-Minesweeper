@@ -13,10 +13,12 @@ const makeBoard = (x, y, numMines) => {
     let board = [];
     let numFlagged = 0;
     let numRevealed = 0;
+    let gameDiv = document.querySelector("#gameDiv");
     const boardSection = document.createElement("section");
     boardSection.setAttribute("id", "board");
+    gameDiv.style.width = (x * 50) + 'px';
     boardSection.style.width = (x * 50) + 'px';
-    document.body.append(boardSection)
+    gameDiv.appendChild(boardSection);
 
     for (let i = 0; i < y; i++) {
         let arr = [];
@@ -34,21 +36,35 @@ const makeBoard = (x, y, numMines) => {
         console.log("clearing board");
         board = null;
         boardSection.remove();
+        gameDiv.remove();
     }
 
     const checkWinCondition = () => {
         console.log(`flagged: ${gameBoard.flagged} revealed: ${gameBoard.revealed}`);
         if ((gameBoard.flagged === numMines) && (gameBoard.flagged + gameBoard.revealed === (x * y))) {
-            setTimeout(() => alert("You Won"), 10);
+            gameOver(true);
         }
+    }
+
+    const gameOver = (win) => {
+        if (win) {
+            setTimeout(() => alert("You Won"), 10);
+
+        } else {
+            setTimeout(() => alert("Game Over"), 10);
+        }
+        setTimeout(() => {
+            clearBoard();
+            difficultyMenu();
+        }, 10)
     }
 
     return {
         board: board,
         revealed: numRevealed,
         flagged: numFlagged,
-        clear: clearBoard,
-        check: checkWinCondition
+        check: checkWinCondition,
+        gameOver: gameOver
     }
 }
 
@@ -107,7 +123,7 @@ const crateSpace = (x, y, board) => {
         }
         if (isBomb) {
             space.textContent = "bomb";
-            setTimeout(() => alert("Game Over"), 10);
+            gameBoard.gameOver(false)
         } else if (!isRevealed) {
             let count = 0;
             if (board[y - 1] && board[y - 1][x - 1] && board[y - 1][x - 1].getBomb()) {
@@ -259,7 +275,7 @@ const difficultyMenu = () => {
     beginner.setAttribute("checked", "");
     let label = document.createElement("label");
     label.setAttribute("for", "beginner");
-    label.textContent = "Beginner";
+    label.textContent = "Beginner (8x8 Grid with 10 Mines)";
     let inputDiv = document.createElement("div");
     inputDiv.appendChild(beginner);
     inputDiv.appendChild(label);
@@ -272,7 +288,7 @@ const difficultyMenu = () => {
     intermediate.setAttribute("value", "intermediate");
     label = document.createElement("label");
     label.setAttribute("for", "intermediate");
-    label.textContent = "Intermediate";
+    label.textContent = "Intermediate (16x16 Grid with 40 Mines)";
     inputDiv = document.createElement("div");
     inputDiv.appendChild(intermediate);
     inputDiv.appendChild(label);
@@ -285,7 +301,7 @@ const difficultyMenu = () => {
     expert.setAttribute("value", "expert");
     label = document.createElement("label");
     label.setAttribute("for", "expert");
-    label.textContent = "Expert";
+    label.textContent = "Expert (30x16 Grid with 99 Mines)";
     inputDiv = document.createElement("div");
     inputDiv.appendChild(expert);
     inputDiv.appendChild(label);
@@ -300,18 +316,35 @@ const difficultyMenu = () => {
     submit.addEventListener("click", () => {
         let inputDifficulty = form.elements["difficulty"];
         menu.remove()
-        if (inputDifficulty.value === "beginner") {
-            gameBoard = makeBoard(8, 8, 10);
-        } else if (inputDifficulty.value === "intermediate") {
-            gameBoard = makeBoard(16, 16, 40);
-        } else if (inputDifficulty.value === "expert") {
-            gameBoard = makeBoard(30, 16, 99);
-        }
+        gameStart(inputDifficulty)
     })
 
     form.appendChild(submit);
 
 
+}
+
+const makeGameHeader = (numMines) => {
+
+}
+
+const gameStart = (difficulty) => {
+
+    let gameDiv = document.createElement("div");
+    gameDiv.setAttribute("id", "gameDiv");
+    document.body.appendChild(gameDiv);
+
+
+    if (difficulty.value === "beginner") {
+        makeGameHeader(10);
+        gameBoard = makeBoard(8, 8, 10);
+    } else if (difficulty.value === "intermediate") {
+        makeGameHeader(40);
+        gameBoard = makeBoard(16, 16, 40);
+    } else if (difficulty.value === "expert") {
+        makeGameHeader(99);
+        gameBoard = makeBoard(30, 16, 99);
+    }
 }
 
 difficultyMenu();

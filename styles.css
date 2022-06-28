@@ -6,6 +6,12 @@
 
 #board {
     display: flex;
+    /* margin: auto; */
+    flex-wrap: wrap;
+}
+
+#gameDiv {
+    display: flex;
     margin: 100px auto;
     flex-wrap: wrap;
 }
