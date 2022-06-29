@@ -43,7 +43,7 @@ MVP Criteria
 4. clicking on a space should reveal a number of nearby mines or end the game if the space is a mine.
 5. right clicking should flag a space as a mine.
 6. the player should win the game if they flag all of the mines.
-7. add a counter the displays how many bombs are on the board and decrease the counter when the player flags a space
+7. add a counter that displays how many bombs are on the board and decrease the counter when the player flags a space
 8. there should be a timer that tracks how long it takes for the player to play the game.
 9. if the player loses or wins the game, they should get a prompt to play again.
 
