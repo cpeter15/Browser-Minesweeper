@@ -2,7 +2,8 @@
 // Intermediate: 16x16 40 Mines
 // Expert: 30x16 99 Mines 
 
-let gameBoard
+let gameBoard;
+let gameStats;
 
 const makeBoard = (x, y, numMines) => {
     // tests if there are too many mines to fit into the board
@@ -47,6 +48,7 @@ const makeBoard = (x, y, numMines) => {
     }
 
     const gameOver = (win) => {
+        gameStats.stopTimer();
         if (win) {
             setTimeout(() => alert("You Won"), 10);
 
@@ -120,6 +122,7 @@ const crateSpace = (x, y, board) => {
             space.style.backgroundImage = "none";
             gameBoard.flagged--;
             isFlaged = false;
+            gameStats.updateFlagCounter();
         }
         if (isBomb) {
             space.textContent = "bomb";
@@ -202,6 +205,7 @@ const crateSpace = (x, y, board) => {
             isFlaged = false;
             gameBoard.flagged--;
         }
+        gameStats.updateFlagCounter();
         gameBoard.check();
     }
 
@@ -325,6 +329,47 @@ const difficultyMenu = () => {
 }
 
 const makeGameHeader = (numMines) => {
+    let statDiv = document.createElement("div");
+    statDiv.setAttribute("id", "statDiv");
+
+    let flagCounter = document.createElement("div");
+    flagCounter.setAttribute("class", "counter");
+    flagCounter.setAttribute("id", "flagCounter");
+    flagCounter.textContent = numMines;
+
+    const updateFlagCounter = () => {
+        flagCounter.textContent = numMines - gameBoard.flagged
+    }
+
+    let timerDiv = document.createElement("div");
+    timerDiv.setAttribute("class", "timer");
+
+    let time = 0;
+
+    timerDiv.textContent = time;
+
+    const updateTimer = () => {
+        time++
+        timerDiv.textContent = time;
+    }
+
+    // starting the interval that will update the timer every second
+    let timerInterval = setInterval(() => updateTimer(), 1000);
+
+    const stopTimer = () => {
+        clearInterval(timerInterval);
+    }
+
+    gameStats = {
+        time: time,
+        stopTimer: stopTimer,
+        updateFlagCounter: updateFlagCounter
+    }
+
+    statDiv.appendChild(flagCounter);
+    statDiv.appendChild(timerDiv);
+
+    document.querySelector("#gameDiv").appendChild(statDiv);
 
 }
 
