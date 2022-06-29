@@ -8,7 +8,7 @@ let gameStats;
 const makeBoard = (x, y, numMines) => {
     // tests if there are too many mines to fit into the board
     if (numMines > (x * y)) {
-        console.log("too many mines")
+        alert("too many mines");
         return null;
     }
     let board = [];
@@ -41,7 +41,6 @@ const makeBoard = (x, y, numMines) => {
     }
 
     const checkWinCondition = () => {
-        console.log(`flagged: ${gameBoard.flagged} revealed: ${gameBoard.revealed}`);
         if ((gameBoard.flagged === numMines) && (gameBoard.flagged + gameBoard.revealed === (x * y))) {
             gameOver(true);
         }
@@ -155,7 +154,7 @@ const crateSpace = (x, y, board) => {
             }
             isRevealed = true;
             gameBoard.revealed += 1;
-            console.log("revealed " + gameBoard.revealed)
+            // console.log("revealed " + gameBoard.revealed);
             if (count !== 0) {
                 space.textContent = count;
             } else {
@@ -197,7 +196,7 @@ const crateSpace = (x, y, board) => {
     const flagSpace = () => {
         if (!isFlaged && !isRevealed) {
             space.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/76px-Minesweeper_flag.svg.png')";
-            console.log("flagged");
+            // console.log("flagged");
             isFlaged = true;
             gameBoard.flagged++;
         } else {
@@ -252,14 +251,14 @@ const armBoard = (board, mines) => {
         })
     })
 
-    console.log(arr)
+    // console.log(arr)
 
     for (let i = 0; i < mines; i++) {
         let random = Math.floor((Math.random() * arr.length));
         let space = arr[random];
         board[space.y][space.x].placeBomb();
         arr.splice(random, 1);
-        console.log(`made bomb ${i}`);
+        // console.log(`made bomb ${i}`);
     }
 
 }
@@ -281,6 +280,7 @@ const difficultyMenu = () => {
     label.setAttribute("for", "beginner");
     label.textContent = "Beginner (8x8 Grid with 10 Mines)";
     let inputDiv = document.createElement("div");
+    inputDiv.setAttribute("class", "difficulty-option");
     inputDiv.appendChild(beginner);
     inputDiv.appendChild(label);
     form.appendChild(inputDiv);
@@ -294,6 +294,7 @@ const difficultyMenu = () => {
     label.setAttribute("for", "intermediate");
     label.textContent = "Intermediate (16x16 Grid with 40 Mines)";
     inputDiv = document.createElement("div");
+    inputDiv.setAttribute("class", "difficulty-option");
     inputDiv.appendChild(intermediate);
     inputDiv.appendChild(label);
     form.appendChild(inputDiv);
@@ -307,6 +308,7 @@ const difficultyMenu = () => {
     label.setAttribute("for", "expert");
     label.textContent = "Expert (30x16 Grid with 99 Mines)";
     inputDiv = document.createElement("div");
+    inputDiv.setAttribute("class", "difficulty-option");
     inputDiv.appendChild(expert);
     inputDiv.appendChild(label);
     form.appendChild(inputDiv);
@@ -330,7 +332,7 @@ const difficultyMenu = () => {
 
 const makeGameHeader = (numMines) => {
     let statDiv = document.createElement("div");
-    statDiv.setAttribute("id", "statDiv");
+    statDiv.setAttribute("id", "stat-div");
 
     let flagCounter = document.createElement("div");
     flagCounter.setAttribute("class", "counter");

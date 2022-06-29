@@ -3,6 +3,38 @@
     margin: 0;
 }
 
+#difficulty-options {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 100px auto;
+    width: 80%;
+    background-color: lightgray;
+    border-radius: 10px;
+}
+
+#difficulty-options button {
+    margin: 10px;
+}
+
+.difficulty-option {
+    width: 100%;
+    margin: 10px
+}
+
+#stat-div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.counter {
+    font-size: 2em;
+}
+
+.timer {
+    font-size: 2em
+}
+
 
 #board {
     display: flex;
@@ -14,6 +46,9 @@
     display: flex;
     margin: 100px auto;
     flex-wrap: wrap;
+    background-color: lightgray;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .spaces {
