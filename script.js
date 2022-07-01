@@ -4,6 +4,7 @@
 
 let gameBoard;
 let gameStats;
+let difficulty;
 
 const makeBoard = (x, y, numMines) => {
     // tests if there are too many mines to fit into the board
@@ -40,6 +41,17 @@ const makeBoard = (x, y, numMines) => {
         gameDiv.remove();
     }
 
+    const revealBombs = () => {
+        board.forEach((arr) => {
+            arr.forEach((space) => {
+                if (space.getBomb()) {
+                    space.button.style.backgroundImage = "none";
+                    space.button.textContent = "bomb";
+                }
+            })
+        })
+    }
+
     const checkWinCondition = () => {
         if ((gameBoard.flagged === numMines) && (gameBoard.flagged + gameBoard.revealed === (x * y))) {
             gameOver(true);
@@ -48,16 +60,38 @@ const makeBoard = (x, y, numMines) => {
 
     const gameOver = (win) => {
         gameStats.stopTimer();
+        document.querySelectorAll(".spaces").forEach((space) => {
+            space.replaceWith(space.cloneNode(true));
+        })
+        let gameOverMenu = document.createElement("div");
+        let gameOverHeader = document.createElement("h2");
+        let gameOverPara = document.createElement("p");
         if (win) {
-            setTimeout(() => alert("You Won"), 10);
-
+            // setTimeout(() => alert("You Won"), 10);
+            gameOverHeader.textContent = "You Won!";
+            gameOverPara.textContent = `You completed Minesweeper on ${difficulty} difficulty in ${gameStats.gameTime} seconds`;
         } else {
-            setTimeout(() => alert("Game Over"), 10);
+            // setTimeout(() => alert("Game Over"), 10);
+            gameOverHeader.textContent = "Game Over";
+            gameOverPara.textContent = "You revealed a mine";
         }
-        setTimeout(() => {
+
+        gameOverMenu.appendChild(gameOverHeader);
+        gameOverMenu.appendChild(gameOverPara);
+
+        let gameOverButton = document.createElement("button");
+        gameOverButton.textContent = "Play again?";
+
+        gameOverButton.addEventListener("click", () => {
             clearBoard();
-            difficultyMenu();
-        }, 10)
+            gameOverMenu.remove();
+            startMenu();
+        })
+
+        gameOverMenu.appendChild(gameOverButton);
+
+        document.querySelector("#gameDiv").appendChild(gameOverMenu);
+
     }
 
     return {
@@ -65,6 +99,7 @@ const makeBoard = (x, y, numMines) => {
         revealed: numRevealed,
         flagged: numFlagged,
         check: checkWinCondition,
+        revealBombs: revealBombs,
         gameOver: gameOver
     }
 }
@@ -124,7 +159,8 @@ const crateSpace = (x, y, board) => {
             gameStats.updateFlagCounter();
         }
         if (isBomb) {
-            space.textContent = "bomb";
+            space.style.backgroundColor = "red";
+            gameBoard.revealBombs();
             gameBoard.gameOver(false)
         } else if (!isRevealed) {
             let count = 0;
@@ -199,7 +235,7 @@ const crateSpace = (x, y, board) => {
             // console.log("flagged");
             isFlaged = true;
             gameBoard.flagged++;
-        } else {
+        } else if (isFlaged && !isRevealed) {
             space.style.backgroundImage = "none";
             isFlaged = false;
             gameBoard.flagged--;
@@ -212,7 +248,7 @@ const crateSpace = (x, y, board) => {
         e.preventDefault();
     })
     space.addEventListener("click", revealSpace);
-    space.addEventListener("auxclick", (e) => {
+    space.addEventListener("auxclick", auxclick = (e) => {
         if (e.button == 2) {
             flagSpace();
         }
@@ -264,7 +300,7 @@ const armBoard = (board, mines) => {
 }
 
 
-const difficultyMenu = () => {
+const startMenu = () => {
     let menu = document.createElement("div");
     menu.setAttribute("class", "menu");
     let form = document.createElement("form");
@@ -314,7 +350,7 @@ const difficultyMenu = () => {
     form.appendChild(inputDiv);
 
     menu.append(form);
-    document.body.appendChild(menu);
+    document.querySelector("#game-window").appendChild(menu);
 
     let submit = document.createElement("button");
     submit.textContent = "Start Game";
@@ -351,8 +387,8 @@ const makeGameHeader = (numMines) => {
     timerDiv.textContent = time;
 
     const updateTimer = () => {
-        time++
-        timerDiv.textContent = time;
+        gameStats.gameTime++
+        timerDiv.textContent = gameStats.gameTime;
     }
 
     // starting the interval that will update the timer every second
@@ -363,7 +399,7 @@ const makeGameHeader = (numMines) => {
     }
 
     gameStats = {
-        time: time,
+        gameTime: time,
         stopTimer: stopTimer,
         updateFlagCounter: updateFlagCounter
     }
@@ -375,25 +411,26 @@ const makeGameHeader = (numMines) => {
 
 }
 
-const gameStart = (difficulty) => {
+const gameStart = (inputDifficulty) => {
 
     let gameDiv = document.createElement("div");
     gameDiv.setAttribute("id", "gameDiv");
-    document.body.appendChild(gameDiv);
+    document.querySelector("#game-window").appendChild(gameDiv);
+    difficulty = inputDifficulty.value;
 
 
-    if (difficulty.value === "beginner") {
+    if (difficulty === "beginner") {
         makeGameHeader(10);
         gameBoard = makeBoard(8, 8, 10);
-    } else if (difficulty.value === "intermediate") {
+    } else if (difficulty === "intermediate") {
         makeGameHeader(40);
         gameBoard = makeBoard(16, 16, 40);
-    } else if (difficulty.value === "expert") {
+    } else if (difficulty === "expert") {
         makeGameHeader(99);
         gameBoard = makeBoard(30, 16, 99);
     }
 }
 
-difficultyMenu();
+startMenu();
 
 
