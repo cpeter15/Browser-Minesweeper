@@ -6,6 +6,13 @@ let gameBoard;
 let gameStats;
 let difficulty;
 
+document.body.onmousedown = (e) => {
+    if (e.button === 1) {
+        e.preventDefault();
+        return false;
+    }
+}
+
 const makeBoard = (x, y, numMines) => {
     // tests if there are too many mines to fit into the board
     if (numMines > (x * y)) {
@@ -45,8 +52,9 @@ const makeBoard = (x, y, numMines) => {
         board.forEach((arr) => {
             arr.forEach((space) => {
                 if (space.getBomb()) {
-                    space.button.style.backgroundImage = "none";
-                    space.button.textContent = "bomb";
+                    // space.button.style.backgroundImage = "none";
+                    // space.button.textContent = "bomb";
+                    space.button.setAttribute("class", "spaces spaces-bomb");
                 }
             })
         })
@@ -66,6 +74,7 @@ const makeBoard = (x, y, numMines) => {
         let gameOverMenu = document.createElement("div");
         let gameOverHeader = document.createElement("h2");
         let gameOverPara = document.createElement("p");
+        gameOverMenu.setAttribute("id", "game-over-menu");
         if (win) {
             // setTimeout(() => alert("You Won"), 10);
             gameOverHeader.textContent = "You Won!";
@@ -153,7 +162,7 @@ const crateSpace = (x, y, board) => {
 
     const revealSpace = () => {
         if (isFlaged) {
-            space.style.backgroundImage = "none";
+            // space.style.backgroundImage = "none";
             gameBoard.flagged--;
             isFlaged = false;
             gameStats.updateFlagCounter();
@@ -231,12 +240,15 @@ const crateSpace = (x, y, board) => {
     }
     const flagSpace = () => {
         if (!isFlaged && !isRevealed) {
-            space.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/76px-Minesweeper_flag.svg.png')";
+            // space.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/76px-Minesweeper_flag.svg.png')";
+            // space.style.backgroundSize = "contain";
+            space.setAttribute("class", "spaces spaces-flagged")
             // console.log("flagged");
             isFlaged = true;
             gameBoard.flagged++;
         } else if (isFlaged && !isRevealed) {
-            space.style.backgroundImage = "none";
+            // space.style.backgroundImage = "none";
+            space.setAttribute("class", "spaces");
             isFlaged = false;
             gameBoard.flagged--;
         }

@@ -3,10 +3,23 @@
     margin: 0;
 }
 
+
+
+header {
+    display: flex;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+}
+
 #game-window {
     display: flex;
     flex-wrap: wrap;
-    margin: 100px auto;
+    margin: auto;
     width: 100%;
     background-color: whitesmoke;
     border-radius: 10px;
@@ -78,4 +91,30 @@
     height: 50px;
     border: 1px solid gray;
     background-color: whitesmoke;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.1em;
+}
+
+.spaces-flagged {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/76px-Minesweeper_flag.svg.png');
+    background-size: contain;
+}
+
+.spaces-bomb {
+    background-image: url("https://img.icons8.com/fluency-systems-filled/48/000000/naval-mine.png");
+    background-size: contain;
+}
+
+#game-over-menu {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+}
+
+footer {
+
+    height: 2em;
 }
