@@ -78,7 +78,11 @@ const makeBoard = (x, y, numMines) => {
         if (win) {
             // setTimeout(() => alert("You Won"), 10);
             gameOverHeader.textContent = "You Won!";
-            gameOverPara.textContent = `You completed Minesweeper on ${difficulty} difficulty in ${gameStats.gameTime} seconds`;
+            if (difficulty.value === "custom") {
+                gameOverPara.textContent = `You completed Minesweeper on custom difficulty with Width: ${difficulty.custom.x}, Height: ${difficulty.custom.y}, and Mines: ${difficulty.custom.mines} in ${gameStats.gameTime} seconds`;
+            } else {
+                gameOverPara.textContent = `You completed Minesweeper on ${difficulty.value} difficulty in ${gameStats.gameTime} seconds`;
+            }
         } else {
             // setTimeout(() => alert("Game Over"), 10);
             gameOverHeader.textContent = "Game Over";
@@ -361,6 +365,54 @@ const startMenu = () => {
     inputDiv.appendChild(label);
     form.appendChild(inputDiv);
 
+    let custom = document.createElement("input");
+    custom.setAttribute("type", "radio");
+    custom.setAttribute("name", "difficulty");
+    custom.setAttribute("id", "custom");
+    custom.setAttribute("value", "custom");
+    label = document.createElement("label");
+    label.setAttribute("for", "custom");
+    label.textContent = "Custom";
+    inputDiv = document.createElement("div");
+    inputDiv.setAttribute("class", "difficulty-option");
+    let customX = document.createElement("input");
+    customX.setAttribute("type", "number");
+    customX.setAttribute("name", "customX");
+    customX.setAttribute("id", "customX");
+    customX.setAttribute("value", "30");
+    let labelx = document.createElement("label");
+    labelx.setAttribute("for", "customX");
+    labelx.setAttribute("class", "custom-inputs");
+    labelx.textContent = "Width: ";
+    let customY = document.createElement("input");
+    customY.setAttribute("type", "number");
+    customY.setAttribute("name", "customY");
+    customY.setAttribute("id", "customY");
+    customY.setAttribute("value", "16");
+    let labely = document.createElement("label");
+    labely.setAttribute("for", "customY");
+    labely.setAttribute("class", "custom-inputs");
+    labely.textContent = "Height: ";
+    let customMines = document.createElement("input");
+    customMines.setAttribute("type", "number");
+    customMines.setAttribute("name", "customMines");
+    customMines.setAttribute("id", "customMines");
+    customMines.setAttribute("value", "99");
+    let labelMines = document.createElement("label");
+    labelMines.setAttribute("for", "customMines");
+    labelMines.setAttribute("class", "custom-inputs");
+    labelMines.textContent = "Mines: ";
+
+    inputDiv.appendChild(custom);
+    inputDiv.appendChild(label);
+    inputDiv.appendChild(labelx);
+    inputDiv.appendChild(customX);
+    inputDiv.appendChild(labely);
+    inputDiv.appendChild(customY);
+    inputDiv.appendChild(labelMines);
+    inputDiv.appendChild(customMines);
+    form.appendChild(inputDiv);
+
     menu.append(form);
     document.querySelector("#game-window").appendChild(menu);
 
@@ -368,7 +420,14 @@ const startMenu = () => {
     submit.textContent = "Start Game";
 
     submit.addEventListener("click", () => {
-        let inputDifficulty = form.elements["difficulty"];
+        let inputDifficulty = {
+            value: form.elements["difficulty"].value,
+            custom: {
+                x: form.elements["customX"].value,
+                y: form.elements["customY"].value,
+                mines: form.elements["customMines"].value
+            }
+        }
         menu.remove()
         gameStart(inputDifficulty)
     })
@@ -428,18 +487,21 @@ const gameStart = (inputDifficulty) => {
     let gameDiv = document.createElement("div");
     gameDiv.setAttribute("id", "gameDiv");
     document.querySelector("#game-window").appendChild(gameDiv);
-    difficulty = inputDifficulty.value;
+    difficulty = inputDifficulty;
 
 
-    if (difficulty === "beginner") {
+    if (difficulty.value === "beginner") {
         makeGameHeader(10);
         gameBoard = makeBoard(8, 8, 10);
-    } else if (difficulty === "intermediate") {
+    } else if (difficulty.value === "intermediate") {
         makeGameHeader(40);
         gameBoard = makeBoard(16, 16, 40);
-    } else if (difficulty === "expert") {
+    } else if (difficulty.value === "expert") {
         makeGameHeader(99);
         gameBoard = makeBoard(30, 16, 99);
+    } else if (difficulty.value === "custom") {
+        makeGameHeader(difficulty.custom.mines);
+        gameBoard = makeBoard(difficulty.custom.x, difficulty.custom.y, difficulty.custom.mines);
     }
 }
 
